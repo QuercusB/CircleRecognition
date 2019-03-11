@@ -1,0 +1,89 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ImageRecognition.ImagePage"
+                    xmlns:utility="clr-namespace:ImageRecognition.Utility">
+    <DataTemplate DataType="{x:Type local:ImagePageVM}">
+        <DataTemplate.Resources>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="Margin" Value="6"/>
+                <Setter Property="Padding" Value="6"/>
+                <Setter Property="BorderBrush" Value="LightGray"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </DataTemplate.Resources>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="160"/>
+            </Grid.ColumnDefinitions>
+            <TabControl Margin="10 10 0 10">
+                <TabItem Header="Image" Padding="5 2">
+                    <Image Source="{Binding Image}"></Image>
+                </TabItem>
+                <TabItem Header="Recognition log" Padding="5 2">
+                    <Border Background="White" Padding="0">
+                        <utility:LogBox Log="{Binding Log}"></utility:LogBox>
+                    </Border>
+                </TabItem>
+            </TabControl>
+            <Border Grid.Column="1">
+                <StackPanel Orientation="Vertical">
+                    <Button Command="{Binding Load}" MinWidth="90">
+                        Load image
+                    </Button>
+                    <StackPanel Visibility="{Binding IsRecognizing, Converter={x:Static utility:VisibilityConverter.CollapsedIfFalse}}"
+                                Margin="0 6">
+                        <TextBlock TextAlignment="Center" Text="Recognizing" />
+                        <ProgressBar Height="10" IsIndeterminate="True" />
+                    </StackPanel>
+                    <StackPanel Visibility="{Binding RecognizerResult, Converter={x:Static utility:VisibilityConverter.CollapsedIfNull}}"
+                                Margin="0 6">
+                        <TextBlock TextAlignment="Center" Text="Recognition results" Margin="0 6" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="Outer circle" Padding="6" Grid.ColumnSpan="2"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="X" Padding="6" Grid.Row="1" />
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.OuterCircleCenter.X, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="Y" Padding="6" Grid.Row="2"/>
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.OuterCircleCenter.Y, Mode=OneWay}" Grid.Row="2" Grid.Column="1"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="R" Padding="6" Grid.Row="3"/>
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.OuterCircleRadius, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="Inner circle" Padding="6" Grid.ColumnSpan="2"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="X" Padding="6" Grid.Row="1" />
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.InnerCircleCenter.X, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="Y" Padding="6" Grid.Row="2"/>
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.InnerCircleCenter.Y, Mode=OneWay}" Grid.Row="2" Grid.Column="1"/>
+                            <TextBlock Background="DarkGray" Foreground="GhostWhite" Text="R" Padding="6" Grid.Row="3"/>
+                            <TextBox TextAlignment="Right" IsReadOnly="True" Text="{Binding RecognizerResult.InnerCircleRadius, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Visibility="{Binding IsRecognitionFailed, Converter={x:Static utility:VisibilityConverter.CollapsedIfFalse}}"
+                                Margin="0 6">
+                        <TextBlock TextAlignment="Center" Text="Recognition failed" Foreground="Red" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
